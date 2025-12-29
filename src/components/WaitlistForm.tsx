@@ -64,27 +64,35 @@ const WaitlistForm = () => {
         'https://script.google.com/macros/s/AKfycbxEMIaUFMhxULou17uOPyXhsz_XMdl6G2WbBNTIaHzAX2JASxbroCA-mbU8u-OUGQjk/exec',
         {
           method: 'POST',
-          mode: 'no-cors',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'text/plain;charset=utf-8',
           },
           body: JSON.stringify(result.data),
         }
       );
 
-      // Since no-cors mode doesn't return response body, we assume success
-      setFormData({
-        fullName: '',
-        emailAddress: '',
-        phoneNumber: '',
-        city: '',
-        userType: '',
-      });
-      
-      toast({
-        title: 'Success!',
-        description: "You've been added to the waitlist. We'll notify you when we launch!",
-      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        setFormData({
+          fullName: '',
+          emailAddress: '',
+          phoneNumber: '',
+          city: '',
+          userType: '',
+        });
+        
+        toast({
+          title: 'Success!',
+          description: "You've been added to the waitlist. We'll notify you when we launch!",
+        });
+      } else {
+        throw new Error(data.message || 'Submission failed');
+      }
     } catch (error) {
       toast({
         title: 'Something went wrong',
