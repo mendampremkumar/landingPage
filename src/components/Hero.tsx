@@ -38,7 +38,7 @@ const Hero = () => {
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="w-32 md:w-44 lg:w-56 animate-float">
+          <div className="w-40 md:w-56 lg:w-72 animate-float">
             <img
               src={appMockup}
               alt="HomelyHaath mobile app"

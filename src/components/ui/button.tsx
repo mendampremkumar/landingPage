@@ -9,15 +9,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-orange-dark shadow-soft hover:shadow-elevated",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        hero: "bg-primary text-primary-foreground hover:bg-orange-dark shadow-elevated hover:shadow-lg transform hover:-translate-y-0.5 font-semibold",
-        waitlist: "bg-primary text-primary-foreground hover:bg-orange-dark shadow-soft font-semibold w-full",
-        nav: "text-foreground hover:text-primary font-medium",
+        default: "bg-primary text-primary-foreground hover:bg-orange-dark hover:scale-105 shadow-soft hover:shadow-elevated transition-all duration-300",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 hover:scale-105 transition-all duration-300",
+        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground hover:scale-105 transition-all duration-300",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:scale-105 transition-all duration-300",
+        ghost: "hover:bg-accent hover:text-accent-foreground hover:scale-105 transition-all duration-300",
+        link: "text-primary underline-offset-4 hover:underline hover:scale-105 transition-all duration-300",
+        hero: "bg-primary text-primary-foreground hover:bg-orange-dark shadow-elevated hover:shadow-lg transform hover:-translate-y-1 hover:scale-105 font-semibold transition-all duration-300",
+        waitlist: "bg-primary text-primary-foreground hover:bg-orange-dark hover:scale-[1.02] shadow-soft font-semibold w-full transition-all duration-300",
+        nav: "text-foreground hover:text-primary font-medium hover:scale-105 transition-all duration-300",
       },
       size: {
         default: "h-10 px-4 py-2",
