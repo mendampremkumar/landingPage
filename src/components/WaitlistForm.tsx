@@ -4,6 +4,8 @@ import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { z } from 'zod';
+import customerIcon from '@/assets/customer-icon.png';
+import makerIcon from '@/assets/maker-icon.png';
 
 const formSchema = z.object({
   fullName: z.string().trim().min(1, 'Full name is required').max(100, 'Name must be less than 100 characters'),
@@ -28,8 +30,8 @@ const WaitlistForm = () => {
 
   const cities = ['Hyderabad', 'Bangalore', 'Mumbai', 'Delhi', 'Chennai'];
   const userTypes = [
-    { value: 'customer', label: 'Customer', description: 'I want to order food' },
-    { value: 'maker', label: 'Maker', description: 'I want to sell food' },
+    { value: 'customer', label: 'Customer', description: 'Support local talent and enjoy homemade goodness', icon: customerIcon },
+    { value: 'maker', label: 'Maker', description: 'Share your culinary talent and sell homemade food', icon: makerIcon },
   ];
 
   const handleInputChange = (field: keyof FormData, value: string) => {
@@ -170,7 +172,7 @@ const WaitlistForm = () => {
                     key={city}
                     type="button"
                     onClick={() => handleInputChange('city', city)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:scale-105 ${
                       formData.city === city
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-muted text-muted-foreground hover:bg-muted/80'
@@ -196,14 +198,15 @@ const WaitlistForm = () => {
                     key={type.value}
                     type="button"
                     onClick={() => handleInputChange('userType', type.value)}
-                    className={`p-4 rounded-xl text-left transition-all duration-200 border ${
+                    className={`p-4 rounded-xl text-center transition-all duration-300 hover:scale-105 border ${
                       formData.userType === type.value
                         ? 'border-primary bg-orange-light'
                         : 'border-border bg-muted hover:border-primary/30'
                     }`}
                   >
+                    <img src={type.icon} alt={type.label} className="w-16 h-16 mx-auto mb-2 object-contain" />
                     <p className="font-semibold text-foreground">{type.label}</p>
-                    <p className="text-sm text-muted-foreground">{type.description}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{type.description}</p>
                   </button>
                 ))}
               </div>

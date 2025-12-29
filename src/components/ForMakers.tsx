@@ -1,16 +1,14 @@
-import { Check } from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import makerCooking from '@/assets/maker-cooking.jpg';
 
 const ForMakers = () => {
   const benefits = [
-    'Set your own menu and prices',
-    'Flexible working hours and schedule',
-    'No investment needed to start',
-    'Reach customers in your locality',
-    'Weekly payments directly to your account',
-    'Marketing and visibility handled by us',
-    'Grow your home-cooking business',
+    { title: 'No cost to join', subtitle: 'Start your journey without any fees' },
+    { title: 'Set your own prices and schedule', subtitle: 'Complete control over your business' },
+    { title: 'Control delivery time and fees', subtitle: 'Manage logistics on your terms' },
+    { title: 'Receive payments after each confirmed order', subtitle: 'Quick and reliable payment system' },
+    { title: 'Manage orders easily from your dashboard', subtitle: 'Simple tools to run your business' },
   ];
 
   return (
@@ -36,7 +34,7 @@ const ForMakers = () => {
 
           {/* Content */}
           <div className="order-1 lg:order-2">
-            <span className="inline-block text-sm font-medium text-primary mb-3 uppercase tracking-wide">
+            <span className="inline-block text-sm font-bold text-primary mb-3 uppercase tracking-wide bg-primary/10 px-3 py-1 rounded-full">
               For Makers
             </span>
             <h2 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-6">
@@ -48,20 +46,31 @@ const ForMakers = () => {
               and earn while doing what you love most.
             </p>
 
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-4 mb-8">
               {benefits.map((benefit, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Check className="w-3 h-3 text-primary" />
+                  <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Check className="w-3 h-3 text-green-600" />
                   </div>
-                  <span className="text-sm text-foreground">{benefit}</span>
+                  <div>
+                    <span className="text-sm font-medium text-foreground">{benefit.title}</span>
+                    <p className="text-xs text-muted-foreground">{benefit.subtitle}</p>
+                  </div>
                 </li>
               ))}
             </ul>
 
-            <Button variant="hero" size="lg" asChild>
-              <a href="#waitlist">Join as Maker</a>
-            </Button>
+            <div>
+              <Button variant="hero" size="lg" asChild>
+                <a href="#waitlist" className="flex items-center gap-2">
+                  Join as Maker
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </Button>
+              <p className="text-xs text-muted-foreground mt-2">
+                Apply now and get notified when maker onboarding opens.
+              </p>
+            </div>
           </div>
         </div>
       </div>
