@@ -61,20 +61,25 @@ const WaitlistForm = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/waitlist-submit`,
+        'https://script.google.com/macros/s/AKfycbxEMIaUFMhxULou17uOPyXhsz_XMdl6G2WbBNTIaHzAX2JASxbroCA-mbU8u-OUGQjk/exec',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
-          body: JSON.stringify(result.data),
+          body: JSON.stringify({
+            fullName: result.data.fullName,
+            emailAddress: result.data.emailAddress,
+            phoneNumber: result.data.phoneNumber,
+            city: result.data.city,
+            userType: result.data.userType,
+          }),
         }
       );
 
       const data = await response.json();
 
-      if (data.success) {
+      if (data.success === true) {
         setFormData({
           fullName: '',
           emailAddress: '',
@@ -88,7 +93,11 @@ const WaitlistForm = () => {
           description: "You've been added to the waitlist. We'll notify you when we launch!",
         });
       } else {
-        throw new Error(data.error || 'Submission failed');
+        toast({
+          title: 'Submission Failed',
+          description: data.message || 'An error occurred while submitting the form.',
+          variant: 'destructive',
+        });
       }
     } catch (error) {
       console.error('Form submission error:', error);
