@@ -14,7 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      waitlist_submissions: {
+        Row: {
+          attempt_count: number
+          created_at: string
+          email: string
+          id: string
+          idempotency_key: string
+          payload: Json
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempt_count?: number
+          created_at?: string
+          email: string
+          id?: string
+          idempotency_key: string
+          payload: Json
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempt_count?: number
+          created_at?: string
+          email?: string
+          id?: string
+          idempotency_key?: string
+          payload?: Json
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
