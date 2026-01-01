@@ -60,32 +60,36 @@ const WaitlistForm = () => {
     setIsLoading(true);
 
     try {
-      await fetch(
-        'https://script.google.com/macros/s/AKfycbxEMIaUFMhxULou17uOPyXhsz_XMdl6G2WbBNTIaHzAX2JASxbroCA-mbU8u-OUGQjk/exec',
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/waitlist-submit`,
         {
           method: 'POST',
-          mode: 'no-cors',
           headers: {
-            'Content-Type': 'text/plain;charset=utf-8',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify(result.data),
         }
       );
 
-      // With no-cors mode, we cannot read the response
-      // If the request completes without throwing, assume success
-      setFormData({
-        fullName: '',
-        emailAddress: '',
-        phoneNumber: '',
-        city: '',
-        userType: '',
-      });
-      
-      toast({
-        title: 'Success!',
-        description: "You've been added to the waitlist. We'll notify you when we launch!",
-      });
+      const data = await response.json();
+
+      if (data.success) {
+        setFormData({
+          fullName: '',
+          emailAddress: '',
+          phoneNumber: '',
+          city: '',
+          userType: '',
+        });
+        
+        toast({
+          title: 'Success!',
+          description: "You've been added to the waitlist. We'll notify you when we launch!",
+        });
+      } else {
+        throw new Error(data.error || 'Submission failed');
+      }
     } catch (error) {
       console.error('Form submission error:', error);
       toast({
