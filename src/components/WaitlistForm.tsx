@@ -61,11 +61,12 @@ const WaitlistForm = () => {
 
     try {
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbxEMIaUFMhxULou17uOPyXhsz_XMdl6G2WbBNTIaHzAX2JASxbroCA-mbU8u-OUGQjk/exec',
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/waitlist-submit`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify({
             fullName: result.data.fullName,
@@ -103,7 +104,7 @@ const WaitlistForm = () => {
       console.error('Form submission error:', error);
       toast({
         title: 'Something went wrong',
-        description: 'Please try again later or contact us directly.',
+        description: 'Form submission failed. Please try again later.',
         variant: 'destructive',
       });
     } finally {
