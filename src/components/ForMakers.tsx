@@ -27,8 +27,8 @@ const ForMakers = () => {
             
             {/* Earning Badge */}
             <div className="absolute -bottom-6 left-4 lg:left-8 bg-card rounded-xl px-6 py-4 shadow-card border border-border">
-              <p className="text-xs text-muted-foreground mb-1">Monthly Earnings</p>
-              <p className="font-display font-bold text-lg lg:text-xl text-primary">₹15,000 - ₹60,000</p>
+              <p className="text-sm text-muted-foreground mb-1">Monthly Earnings</p>
+              <p className="font-display font-bold text-2xl lg:text-3xl text-primary">₹15,000 - ₹60,000</p>
             </div>
           </div>
 
