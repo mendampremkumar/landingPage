@@ -220,7 +220,7 @@ const WaitlistForm = () => {
                         : 'border-border bg-muted hover:border-primary/30'
                     }`}
                   >
-                    <img src={type.icon} alt={type.label} className="w-16 h-16 mx-auto mb-2 object-contain" />
+                    <img src={type.icon} alt={type.label} className="w-24 h-24 mx-auto mb-3 object-contain" />
                     <p className="font-semibold text-foreground">{type.label}</p>
                     <p className="text-xs text-muted-foreground mt-1">{type.description}</p>
                   </button>

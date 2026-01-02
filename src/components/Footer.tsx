@@ -1,4 +1,5 @@
 import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
+import logoFooter from '@/assets/logo-footer.png';
 
 const Footer = () => {
   const footerLinks = {
@@ -21,10 +22,7 @@ const Footer = () => {
           {/* Logo & Description */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">H</span>
-              </div>
-              <span className="font-display font-bold text-lg">HomelyHaath</span>
+              <img src={logoFooter} alt="HomelyHaath" className="h-10 w-auto" />
             </div>
             <p className="text-sm text-background/70 mb-4">
               Connecting homemade food lovers with talented local cooks.

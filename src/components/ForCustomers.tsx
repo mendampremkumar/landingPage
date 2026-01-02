@@ -66,13 +66,13 @@ const ForCustomers = () => {
             
             {/* Stats */}
             <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex gap-4">
-              <div className="bg-card rounded-xl px-6 py-3 shadow-card border border-border">
-                <p className="font-display font-bold text-xl text-primary">500+</p>
-                <p className="text-xs text-muted-foreground">Home Cooks</p>
+              <div className="bg-card rounded-xl px-6 py-4 shadow-card border border-border">
+                <p className="font-display font-bold text-2xl lg:text-3xl text-primary">500+</p>
+                <p className="text-sm text-muted-foreground">Home Cooks</p>
               </div>
-              <div className="bg-card rounded-xl px-6 py-3 shadow-card border border-border">
-                <p className="font-display font-bold text-xl text-primary">100+</p>
-                <p className="text-xs text-muted-foreground">Dishes</p>
+              <div className="bg-card rounded-xl px-6 py-4 shadow-card border border-border">
+                <p className="font-display font-bold text-2xl lg:text-3xl text-primary">100+</p>
+                <p className="text-sm text-muted-foreground">Dishes</p>
               </div>
             </div>
           </div>
