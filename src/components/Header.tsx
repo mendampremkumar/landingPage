@@ -17,7 +17,8 @@ const Header = () => {
     label: 'Locations',
     href: '#locations'
   }];
-  return <header className="fixed top-0 left-0 right-0 z-50 flex justify-center mt-5">
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 flex flex-col items-center mt-5 px-4">
       <div className="bg-background/95 backdrop-blur-sm border border-border rounded-full px-6 lg:px-[50px]">
         <div className="flex items-center gap-[35px] h-16 lg:h-20 w-auto">
           {/* Logo */}
@@ -27,9 +28,15 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-5">
-            {navItems.map(item => <a key={item.label} href={item.href} className="text-sm font-medium text-foreground hover:text-primary transition-all duration-300 hover:scale-105">
+            {navItems.map(item => (
+              <a 
+                key={item.label} 
+                href={item.href} 
+                className="text-sm font-medium text-foreground hover:text-primary transition-all duration-300 hover:scale-105"
+              >
                 {item.label}
-              </a>)}
+              </a>
+            ))}
           </nav>
 
           {/* CTA Button */}
@@ -40,23 +47,37 @@ const Header = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button className="lg:hidden p-2 text-foreground" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle menu">
+          <button 
+            className="lg:hidden p-2 text-foreground" 
+            onClick={() => setIsMenuOpen(!isMenuOpen)} 
+            aria-label="Toggle menu"
+          >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
       {/* Mobile Navigation */}
-      {isMenuOpen && <div className="lg:hidden py-4 border-t border-border px-4">
-          <nav className="flex flex-col gap-4">
-            {navItems.map(item => <a key={item.label} href={item.href} className="text-sm font-medium text-foreground hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>
+      {isMenuOpen && (
+        <div className="lg:hidden mt-2 w-full max-w-sm bg-background border border-border rounded-2xl shadow-elevated overflow-hidden">
+          <nav className="flex flex-col p-4">
+            {navItems.map(item => (
+              <a 
+                key={item.label} 
+                href={item.href} 
+                className="py-3 px-4 text-sm font-medium text-foreground hover:text-primary hover:bg-muted rounded-lg transition-colors" 
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {item.label}
-              </a>)}
-            <Button variant="hero" size="default" className="mt-2" asChild>
-              <a href="#waitlist">Join Waitlist</a>
+              </a>
+            ))}
+            <Button variant="hero" size="default" className="mt-3" asChild>
+              <a href="#waitlist" onClick={() => setIsMenuOpen(false)}>Join Waitlist</a>
             </Button>
           </nav>
-        </div>}
-    </header>;
+        </div>
+      )}
+    </header>
+  );
 };
 export default Header;
