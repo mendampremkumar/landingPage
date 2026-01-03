@@ -28,7 +28,7 @@ const WaitlistForm = () => {
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const cities = ['Hyderabad', 'Bangalore', 'Mumbai', 'Delhi', 'Chennai'];
+  const cities = ['Hyderabad', 'Bangalore', 'Mumbai'];
   const userTypes = [
     { value: 'customer', label: 'Customer', description: 'Support local talent and enjoy homemade goodness', icon: customerIcon },
     { value: 'maker', label: 'Maker', description: 'Share your culinary talent and sell homemade food', icon: makerIcon },
