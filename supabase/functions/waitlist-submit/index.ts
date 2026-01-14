@@ -2,9 +2,32 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { z } from "https://esm.sh/zod@3.25.76";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+// Allowed origins - configurable via environment variable
+const getAllowedOrigins = (): string[] => {
+  const envOrigins = Deno.env.get('ALLOWED_ORIGINS');
+  if (envOrigins) {
+    return envOrigins.split(',').map(o => o.trim());
+  }
+  // Default allowed origins
+  return [
+    'https://sobfbvmucraikwwhlgst.lovableproject.com',
+    'http://localhost:5173',
+    'http://localhost:8080',
+  ];
+};
+
+const getCorsHeaders = (origin: string | null): Record<string, string> => {
+  const allowedOrigins = getAllowedOrigins();
+  const isAllowed = origin && allowedOrigins.some(allowed => 
+    allowed === origin || (allowed.includes('*') && origin.endsWith(allowed.replace('*', '')))
+  );
+  
+  return {
+    'Access-Control-Allow-Origin': isAllowed && origin ? origin : allowedOrigins[0],
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Credentials': 'true',
+    'Vary': 'Origin',
+  };
 };
 
 // Server-side validation schema matching client-side
@@ -18,15 +41,67 @@ const formSchema = z.object({
 
 // Rate limiting configuration
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
-const MAX_SUBMISSIONS_PER_WINDOW = 5;
+const MAX_SUBMISSIONS_PER_EMAIL = 5;
+const MAX_SUBMISSIONS_PER_IP = 20; // Stricter IP-based limit
+
+// In-memory IP rate limiting (reset on function cold start)
+const ipSubmissionCounts = new Map<string, { count: number; windowStart: number }>();
+
+const checkIpRateLimit = (ip: string): boolean => {
+  const now = Date.now();
+  const record = ipSubmissionCounts.get(ip);
+  
+  if (!record || now - record.windowStart > RATE_LIMIT_WINDOW_MS) {
+    ipSubmissionCounts.set(ip, { count: 1, windowStart: now });
+    return true;
+  }
+  
+  if (record.count >= MAX_SUBMISSIONS_PER_IP) {
+    return false;
+  }
+  
+  record.count++;
+  return true;
+};
+
+const getClientIp = (req: Request): string => {
+  // Check common headers for client IP
+  const forwardedFor = req.headers.get('x-forwarded-for');
+  if (forwardedFor) {
+    return forwardedFor.split(',')[0].trim();
+  }
+  const realIp = req.headers.get('x-real-ip');
+  if (realIp) {
+    return realIp;
+  }
+  const cfConnectingIp = req.headers.get('cf-connecting-ip');
+  if (cfConnectingIp) {
+    return cfConnectingIp;
+  }
+  return 'unknown';
+};
 
 serve(async (req) => {
+  const origin = req.headers.get('origin');
+  const corsHeaders = getCorsHeaders(origin);
+  
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   const requestId = crypto.randomUUID();
+  const clientIp = getClientIp(req);
+
+  // Validate origin for non-preflight requests
+  const allowedOrigins = getAllowedOrigins();
+  if (origin && !allowedOrigins.some(allowed => allowed === origin)) {
+    console.log(`[${requestId}] Rejected request from unauthorized origin`);
+    return new Response(
+      JSON.stringify({ success: false, message: 'Unauthorized request' }),
+      { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
 
   try {
     // Get webhook URL from environment variable
@@ -36,6 +111,15 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ success: false, message: 'Service temporarily unavailable' }),
         { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // IP-based rate limiting
+    if (!checkIpRateLimit(clientIp)) {
+      console.log(`[${requestId}] IP rate limit exceeded`);
+      return new Response(
+        JSON.stringify({ success: false, message: 'Too many requests. Please try again later.' }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
@@ -76,7 +160,7 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Rate limiting by email
+    // Email-based rate limiting (persistent)
     const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
     const { count, error: countError } = await supabase
       .from('waitlist_submissions')
@@ -86,8 +170,8 @@ serve(async (req) => {
 
     if (countError) {
       console.error(`[${requestId}] Rate limit check error:`, countError);
-    } else if (count && count >= MAX_SUBMISSIONS_PER_WINDOW) {
-      console.log(`[${requestId}] Rate limit exceeded for email`);
+    } else if (count && count >= MAX_SUBMISSIONS_PER_EMAIL) {
+      console.log(`[${requestId}] Email rate limit exceeded`);
       return new Response(
         JSON.stringify({ success: false, message: 'Too many submissions. Please try again later.' }),
         { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
