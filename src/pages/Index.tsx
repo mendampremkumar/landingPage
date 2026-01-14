@@ -8,10 +8,12 @@ import LaunchingIn from '@/components/LaunchingIn';
 import Testimonials from '@/components/Testimonials';
 import WaitlistForm from '@/components/WaitlistForm';
 import Footer from '@/components/Footer';
+import AnnouncementBanner from '@/components/AnnouncementBanner';
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
+      <AnnouncementBanner />
       <Header />
       <main>
         <Hero />
