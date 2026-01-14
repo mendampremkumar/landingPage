@@ -1,16 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Rocket, X } from 'lucide-react';
 
 const AnnouncementBanner = () => {
   const [isVisible, setIsVisible] = useState(true);
 
-  useEffect(() => {
-    const dismissed = localStorage.getItem('announcementDismissed');
-    if (dismissed) setIsVisible(false);
-  }, []);
-
   const handleDismiss = () => {
-    localStorage.setItem('announcementDismissed', 'true');
     setIsVisible(false);
   };
 
