@@ -19,7 +19,7 @@ const AnnouncementBanner = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
+    <div className="fixed bottom-6 left-0 right-0 z-50 animate-fade-in flex justify-center">
       <div className="bg-gradient-to-r from-primary via-primary to-orange-600 text-white py-3 px-5 rounded-full shadow-xl relative overflow-hidden">
         {/* Subtle background glow */}
         <div className="absolute inset-0 opacity-20">
