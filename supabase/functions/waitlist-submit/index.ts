@@ -10,7 +10,11 @@ const getAllowedOrigins = (): string[] => {
   }
   // Default allowed origins
   return [
+    'https://homelyhaath.com',
+    'https://www.homelyhaath.com',
     'https://sobfbvmucraikwwhlgst.lovableproject.com',
+    'https://id-preview--b1433fcd-4b87-4d85-9fa8-7b01a4d9566b.lovable.app',
+    'https://figma-fetch-form.lovable.app',
     'http://localhost:5173',
     'http://localhost:8080',
   ];
