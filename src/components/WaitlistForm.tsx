@@ -27,6 +27,7 @@ const WaitlistForm = () => {
   });
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [debugError, setDebugError] = useState<string | null>(null);
 
   const cities = ['Hyderabad', 'Bangalore', 'Mumbai'];
   const userTypes = [
@@ -58,6 +59,7 @@ const WaitlistForm = () => {
     }
 
     setIsLoading(true);
+    setDebugError(null);
 
     try {
       const response = await fetch(
@@ -94,6 +96,8 @@ const WaitlistForm = () => {
           description: "You've been added to the waitlist. We'll notify you when we launch!",
         });
       } else {
+        const errorDetails = `Status: ${response.status} | Message: ${data.message || 'Unknown error'} | Debug: ${data.debug || 'No debug info'}`;
+        setDebugError(errorDetails);
         toast({
           title: 'Submission Failed',
           description: data.message || 'An error occurred while submitting the form.',
@@ -102,6 +106,8 @@ const WaitlistForm = () => {
       }
     } catch (error) {
       console.error('Form submission error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setDebugError(`Network Error: ${errorMessage}`);
       toast({
         title: 'Something went wrong',
         description: 'Form submission failed. Please try again later.',
@@ -124,6 +130,13 @@ const WaitlistForm = () => {
               Limited slots are open. Join now and be the first to know.
             </p>
           </div>
+
+          {debugError && (
+            <div className="mb-6 p-4 bg-destructive/10 border border-destructive rounded-xl text-sm text-destructive">
+              <p className="font-semibold mb-1">Debug Info:</p>
+              <p className="break-all">{debugError}</p>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="bg-background rounded-3xl p-6 lg:p-8 shadow-card border border-border">
             {/* Full Name */}

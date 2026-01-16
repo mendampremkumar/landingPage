@@ -205,6 +205,7 @@ serve(async (req) => {
 
     const responseText = await response.text();
     console.log(`[${requestId}] Webhook response status: ${response.status}`);
+    console.log(`[${requestId}] Webhook response body: ${responseText.substring(0, 500)}`);
 
     // Parse response
     let result;
@@ -223,7 +224,11 @@ serve(async (req) => {
     } else {
       console.log(`[${requestId}] Webhook returned failure`);
       return new Response(
-        JSON.stringify({ success: false, message: 'Unable to complete submission. Please try again.' }),
+        JSON.stringify({ 
+          success: false, 
+          message: 'Unable to complete submission. Please try again.',
+          debug: `Webhook status: ${response.status}, Response: ${responseText.substring(0, 200)}`
+        }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
